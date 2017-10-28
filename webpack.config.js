@@ -1,28 +1,60 @@
-var webpack = require('webpack');
-var ignore = new webpack.IgnorePlugin(/\.svg$/)
+const autoprefixer = require('autoprefixer');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const OfflinePlugin = require('offline-plugin');
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-  devtool: 'source-map',
-  entry: {
-    main: [
-      './src/main.js',
-      'webpack-dev-server/client?http://localhost:8080',
-      'webpack/hot/only-dev-server'
-    ]
-  },
+  context: path.resolve('src'),
+  devtool: 'eval',
+  entry: [
+    'react-hot-loader/patch',
+    'babel-polyfill',
+    'isomorphic-fetch',
+    '../styles/main.scss',
+    './index.jsx',
+  ],
   output: {
-    publicPath: 'http://localhost:8080/',
-    filename: '/js/[name].js'
+    filename: 'js/[name].js',
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
   },
   module: {
     loaders: [
-      { test: /\.js$/, loaders: ['babel?' + JSON.stringify({presets: ['react', 'es2015', 'stage-0']})], exclude: /node_modules/ },
-      { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] }
-    ]
+      {
+        test: /\.(js|jsx)$/,
+        loaders: ['babel-loader'],
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          { loader: 'css-hot-loader' },
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [autoprefixer({ browsers: ['> 1%', 'IE >= 10'] })],
+            },
+          },
+          { loader: 'sass-loader' },
+        ],
+      },
+    ],
   },
-  plugins: [ignore],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new HtmlWebpackPlugin({ template: '../public/index.html' }),
+    new webpack.IgnorePlugin(/\.svg$/),
+    new OfflinePlugin({ caches: { main: [] } }),
+  ],
   devServer: {
     host: '0.0.0.0',
-    proxy: {}
-  }
+    hot: true,
+    port: '8080',
+  },
 };
