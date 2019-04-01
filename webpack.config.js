@@ -1,6 +1,5 @@
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const OfflinePlugin = require('offline-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -21,14 +20,14 @@ module.exports = {
     extensions: ['.js', '.jsx'],
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(js|jsx)$/,
         loaders: ['babel-loader'],
         exclude: /node_modules/,
       },
       {
-        test: /\.scss$/,
+        test: /\.(css|scss)$/,
         use: [
           { loader: 'css-hot-loader' },
           { loader: 'style-loader' },
@@ -50,7 +49,6 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({ template: '../public/index.html' }),
     new webpack.IgnorePlugin(/\.svg$/),
-    new OfflinePlugin({ caches: { main: [] } }),
   ],
   devServer: {
     host: '0.0.0.0',
