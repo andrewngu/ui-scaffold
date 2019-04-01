@@ -1,6 +1,5 @@
 /* global document */
 
-import OfflinePluginRuntime from 'offline-plugin/runtime';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
@@ -8,8 +7,6 @@ import { Provider } from 'react-redux';
 
 import RootContainer from './containers/RootContainer';
 import configureStore from './store/configureStore';
-
-OfflinePluginRuntime.install();
 
 const render = (Component) => {
   ReactDOM.render(
