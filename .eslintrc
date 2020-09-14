@@ -1,4 +1,11 @@
 {
-  "extends": "airbnb",
-  "rules": {}
+  "env": {
+    "browser": true
+  },
+  "extends": ["airbnb", "prettier"],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+  }
 }
